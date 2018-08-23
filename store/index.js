@@ -4,7 +4,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       stockSymbols: ['JFC', 'ALI', 'SMPH'],
-      myStocks: [
+      tradePlans: [
         {
           symbol: 'JFC',
           buyPrice: 200,
@@ -19,7 +19,7 @@ const createStore = () => {
     },
     mutations: {
       addMyStock (state, myStock) {
-        state.myStocks.push(myStock)
+        state.tradePlans.push(myStock)
       }
     },
     actions: {

@@ -1,24 +1,26 @@
 <template lang="pug">
   div
-    form.my-stock-form(@submit.prevent="addStock")
-      input(type="text" placeholder="Symbol")
-      input(type="number" placeholder="Buy Price")
-      input(type="submit")
+    navbar
+    trade-plan-form(@submit="addStock")
     ul
-      li(v-for="myStock in myStocks") {{ myStock.symbol }} {{ myStock.buyPrice }}
+      li(v-for="tradePlan in tradePlans") {{ tradePlan.symbol }} {{ tradePlan.buyPrice }}
 </template>
 
 <script>
+
+import Navbar from '@/components/Navbar.vue'
+import TradePlanForm from '@/components/TradePlanForm.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  components: { Navbar, TradePlanForm },
   computed: mapState([
-    'myStocks'
+    'tradePlans'
   ]),
   methods: {
-    ...mapActions(['addMyStock']),
-    addStock() {
-      this.addMyStock({ symbol: 'NOW', buyPrice: 13 })
+    ...mapActions(['addtradePlan']),
+    addStock(tradePlanToAdd) {
+      this.addtradePlan(tradePlanToAdd)
     }
   }
 }

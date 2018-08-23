@@ -25,7 +25,7 @@ export default {
 		return fees + salesTax
 	},
 
-
+	// Actual costs
 	getBuyCost(price, quantity) {
 		return (price * quantity) + this.getBuyFees(price, quantity)
 	},
@@ -39,11 +39,24 @@ export default {
 
 		return this.getSellCost(exit, quantity) - this.getBuyCost(entry, quantity)
 	},
+
+	// % Change
+	getChangePercent(profit, buyCost) {
+		if(!profit || !buyCost || buyCost <= 0)
+			return 0
+
+		return Math.round((profit / buyCost * 100) * 100) / 100
+	},
+
+	// Risk Reward Ratio
 	getRiskRewardRatio(entry, stopLoss, targetPrice) {
 		if(!entry || !stopLoss || !targetPrice) {
 			return 0
 		}
 		
 		return (targetPrice - entry) / (entry - stopLoss)
+	},
+	getPrettyRiskRewardRatio(entry, stopLoss, targetPrice) {
+		return `1:${this.getRiskRewardRatio(entry, stopLoss, targetPrice)}`
 	}
 }

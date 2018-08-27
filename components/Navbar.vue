@@ -2,7 +2,9 @@
   .tabs
     ul
       li.is-active
-        a Trade Plans
+        a Trades
+      li
+        a Plans
       li
         a Profile
       li

@@ -39,6 +39,19 @@ export default {
 
 		return this.getSellCost(exit, quantity) - this.getBuyCost(entry, quantity)
 	},
+	getAmount(type, price, quantity) {
+		if(!type || !price || !quantity) {
+			return 0
+		}
+
+		if(type == 'buy') {
+			return this.getBuyCost(price, quantity)
+		} else if (type == 'sell') {
+			return this.getSellCost(price, quantity)
+		}
+
+		return 0
+	},
 
 	// % Change
 	getChangePercent(profit, buyCost) {
@@ -58,5 +71,5 @@ export default {
 	},
 	getPrettyRiskRewardRatio(entry, stopLoss, targetPrice) {
 		return `1:${this.getRiskRewardRatio(entry, stopLoss, targetPrice)}`
-	}
+	},
 }

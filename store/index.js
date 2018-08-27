@@ -15,6 +15,27 @@ const createStore = () => {
           buyPrice: 50,
           quantity: 100
         }
+      ],
+      trades: [
+        {
+          "symbol": "jfc",
+          "position": "long",
+          "remarks": "nice",
+          "transactions": [
+            {
+              "quantity": "100",
+              "type": "buy",
+              "price": "300",
+              "timestamp": ""
+            },
+            {
+              "quantity": "100",
+              "type": "sell",
+              "price": "320",
+              "timestamp": ""
+            },
+          ]
+        }
       ]
     },
     mutations: {

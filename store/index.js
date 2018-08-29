@@ -18,24 +18,49 @@ const createStore = () => {
       ],
       trades: [
         {
+          "symbol": "ion",
+          "position": "long",
+          "remarks": "elliot waves",
+          "transactions": [
+            {
+              "quantity": 1000,
+              "type": "buy",
+              "price": 2.23,
+              "timestamp": "1000"
+            },
+            {
+              "quantity": 1000,
+              "type": "sell",
+              "price": 2.49,
+              "timestamp": "3000"
+            },
+          ]
+        },
+        {
           "symbol": "jfc",
           "position": "long",
           "remarks": "nice",
           "transactions": [
             {
-              "quantity": "100",
+              "quantity": 100,
               "type": "buy",
-              "price": "300",
-              "timestamp": ""
+              "price": 300,
+              "timestamp": "1000"
             },
             {
-              "quantity": "100",
+              "quantity": 100,
+              "type": "buy",
+              "price": 310,
+              "timestamp": "1500"
+            },
+            {
+              "quantity": 200,
               "type": "sell",
-              "price": "320",
-              "timestamp": ""
+              "price": 320,
+              "timestamp": "3000"
             },
           ]
-        }
+        },
       ]
     },
     mutations: {

@@ -1,7 +1,9 @@
+import _ from 'lodash'
+
 const PSE_TAX = 0.006 // percent
 
 export default {
-	// Commission thingies
+	// Commission thingies -----------------------------------------------
 	getBuyFees(price, quantity) {
 		if(price <= 0) {
 			return 0
@@ -25,7 +27,9 @@ export default {
 		return fees + salesTax
 	},
 
-	// Actual costs
+
+
+	// Actual costs -----------------------------------------------
 	getBuyCost(price, quantity) {
 		return (price * quantity) + this.getBuyFees(price, quantity)
 	},
@@ -53,7 +57,9 @@ export default {
 		return 0
 	},
 
-	// % Change
+
+
+	// % Change -----------------------------------------------
 	getChangePercent(profit, buyCost) {
 		if(!profit || !buyCost || buyCost <= 0)
 			return 0
@@ -61,7 +67,9 @@ export default {
 		return Math.round((profit / buyCost * 100) * 100) / 100
 	},
 
-	// Risk Reward Ratio
+
+
+	// Risk Reward Ratio -----------------------------------------------
 	getRiskRewardRatio(entry, stopLoss, targetPrice) {
 		if(!entry || !stopLoss || !targetPrice) {
 			return 0
@@ -72,4 +80,63 @@ export default {
 	getPrettyRiskRewardRatio(entry, stopLoss, targetPrice) {
 		return `1:${this.getRiskRewardRatio(entry, stopLoss, targetPrice)}`
 	},
+
+	// Trade -----------------------------------------------
+
+	// Cost of all transactions
+	getTransactionsCost(transactionType, transactions) {
+		return _
+			.chain(transactions)
+			.filter({ type: transactionType })
+			.sumBy(transaction => {
+				return transactionType == 'buy' ?
+					this.getBuyCost(transaction.price, transaction.quantity) :
+					this.getSellCost(transaction.price, transaction.quantity)
+			})
+			.value()
+	},
+	getTransactionsBuyCost(transactions) { return this.getTransactionsCost('buy', transactions) },
+	getTransactionsSellCost(transactions) { return this.getTransactionsCost('sell', transactions) },
+
+	// Profit
+	getTransactionsProfit(transactions) {
+		return this.getTransactionsSellCost(transactions) - this.getTransactionsBuyCost(transactions)
+	},
+	getTransactionsChange(transactions) {
+		return (this.getTransactionsProfit(transactions) / this.getTransactionsBuyCost(transactions)) * 100
+	},
+
+	// Count
+	getCount(transactionType, transactions) {
+		return _
+			.chain(transactions)
+			.filter({ type: transactionType })
+			.sumBy('quantity')
+			.value()
+	},
+	getBuyCount(transactions) { return this.getCount('buy', transactions) },
+	getSellCount(transactions) { return this.getCount('sell', transactions) },
+
+	// Timestamp
+	getTimestamp(transactionType, transactions) {
+		return _
+			.chain(transactions)
+			.filter({ type: transactionType })
+			.map('timestamp')
+			.first()
+			.value()
+	},
+	getBuyTimestamp(transactions) { return this.getTimestamp('buy', transactions) },
+	getSellTimestamp(transactions) { return this.getTimestamp('sell', transactions) },
+
+	// Average price
+	getAveragePrice(transactionType, transactions) {
+		return _
+			.chain(transactions)
+			.filter({ type: transactionType })
+			.meanBy('price')
+			.value()
+	},
+	getAverageBuyPrice(transactions) { return this.getAveragePrice('buy', transactions) },
+	getAverageSellPrice(transactions) { return this.getAveragePrice('sell', transactions) },
 }

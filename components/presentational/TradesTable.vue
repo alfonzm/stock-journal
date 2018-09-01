@@ -14,16 +14,16 @@
         th Change
       tbody
         tr(v-for="trade in trades")
-          td {{ tradeCalc().getBuyTimestamp(trade.transactions) }}
-          td {{ tradeCalc().getSellTimestamp(trade.transactions) }}
+          td {{ getBuyTimestamp(trade.transactions) }}
+          td {{ getSellTimestamp(trade.transactions) }}
           td {{ trade.symbol }}
           td {{ trade.remarks }}
-          td {{ tradeCalc().getBuyCount(trade.transactions) }} @ {{ tradeCalc().getAverageBuyPrice(trade.transactions) }}
-          td {{ tradeCalc().getSellCount(trade.transactions) }} @ {{ tradeCalc().getAverageSellPrice(trade.transactions) }}
-          td {{ tradeCalc().getTransactionsBuyCost(trade.transactions) }}
-          td {{ tradeCalc().getTransactionsSellCost(trade.transactions) }}
-          td {{ tradeCalc().getTransactionsProfit(trade.transactions) }}
-          td {{ tradeCalc().getTransactionsChange(trade.transactions) }}
+          td {{ getBuyCount(trade.transactions) }} @ {{ getAverageBuyPrice(trade.transactions) }}
+          td {{ getSellCount(trade.transactions) }} @ {{ getAverageSellPrice(trade.transactions) }}
+          td {{ getTransactionsBuyCost(trade.transactions).toFixed(2) }}
+          td {{ getTransactionsSellCost(trade.transactions).toFixed(2) }}
+          td {{ getTransactionsProfit(trade.transactions).toFixed(2) }}
+          td {{ getTransactionsChange(trade.transactions).toFixed(2) }}
 </template>
 
 <script>
@@ -34,9 +34,7 @@ export default {
     'trades', // array of Trade
   ],
   methods: {
-    tradeCalc() {
-      return TradeCalc
-    }
+    ...TradeCalc
   }
 }
 </script>

@@ -1,7 +1,6 @@
 <template lang="pug">
-  div
-    .container.is-fluid
-      h1.title Dashboard
+  section.section
+    h1.title Dashboard
 </template>
 
 <script>

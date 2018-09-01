@@ -1,5 +1,5 @@
 <template lang="pug">
-  .container.is-fluid
+  .section
     trade-form
 </template>
 

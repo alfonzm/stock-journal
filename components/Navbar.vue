@@ -1,8 +1,12 @@
 <template lang="pug">
-  .tabs
-    ul
-      li(v-for="route in routes" :class="{'is-active':($route.name === route.url)}")
-        nuxt-link(:to="route.url") {{ route.name }}
+  .navbar.has-shadow
+    .navbar-brand
+      a.navbar-item
+        strong IPIT.PH
+    .navbar-menu
+      .navbar-start
+        template(v-for="route in routes")
+          nuxt-link.navbar-item(:class="{'is-active':($route.name === route.url)}" :to="route.url") {{ route.name }}
 </template>
 
 <script>

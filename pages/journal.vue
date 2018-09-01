@@ -1,8 +1,7 @@
 <template lang="pug">
-  div
-    .container.is-fluid
-      h1.title Journal
-      trades-table(:trades="trades")
+  section.section
+    h1.title Journal
+    trades-table(:trades="trades")
 </template>
 
 <script>

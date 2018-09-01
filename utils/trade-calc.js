@@ -78,8 +78,24 @@ export default {
 		return (targetPrice - entry) / (entry - stopLoss)
 	},
 	getPrettyRiskRewardRatio(entry, stopLoss, targetPrice) {
-		return `1:${this.getRiskRewardRatio(entry, stopLoss, targetPrice)}`
+		return `1:${this.getRiskRewardRatio(entry, stopLoss, targetPrice).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
 	},
+
+
+
+	// TradePlan -----------------------------------------------
+	// getTradePlanStats({ entryPrice, exitPrice, quantity, stopLossPrice}) {
+	// 	const profit = this.getProfit(entryPrice, exitPrice, quantity)
+	// 	const buyCost = this.getBuyCost(entryPrice, quantity)
+	// 	return {
+	// 		riskRewardRatio: this.getPrettyRiskRewardRatio(entryPrice, stopLossPrice, exitPrice),
+	// 		changePercentage: this.getChangePercent(profit, buyCost),
+	// 		buyCost: buyCost,
+	// 		profit: this.getProfit(entryPrice, exitPrice, quantity)
+	// 	}
+	// },
+
+
 
 	// Trade -----------------------------------------------
 

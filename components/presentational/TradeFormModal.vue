@@ -6,51 +6,53 @@
         p.modal-card-title Add trade
         button.delete(aria-label="close" @click="onCancel")
       section.modal-card-body
-        trade-form(@submit="addStock" ref="tradeForm")
+        trade-form(ref="tradeForm")
       footer.modal-card-foot
-        button.button.is-primary.float-right(@click="submit") Add trade plan
+        button.button.is-primary.float-right(@click="submit")
+          template(v-if="trade && trade.id")
+            | Save trade
+          template(v-else)
+            | Add trade
         button.button(@click="onCancel") Cancel
 </template>
 
 <script>
 
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TradeForm from '@/components/presentational/TradeForm.vue'
 
 export default {
   components: { TradeForm },
-  props: ['active'],
-  data() {
-    return {
-    }
+  props: {
+    active: Boolean
   },
   watch: {
     active(active) {
       if(active) {
         this.onShow()
-      } else {
-        this.onClose()
       }
     }
   },
+  computed: {
+    ...mapState('journal', {
+      trade: state => state.tradeFormTrade
+    }),
+  },
   methods: {
-    ...mapActions(['addTrade']),
+    ...mapActions(['addTrade', 'updateTrade']),
     onShow() {
       this.$refs.tradeForm.onShow()
     },
-    onClose() {
-
-    },
-    addStock() {
-
-    },
     onCancel() {
       this.$emit('close')
-      this.onClose()
     },
     submit() {
       const tradeFormData = this.$refs.tradeForm.getTradeFormData()
-      this.addTrade(tradeFormData)
+      if(tradeFormData.id) {
+        this.updateTrade(tradeFormData)
+      } else {
+        this.addTrade(tradeFormData)
+      }
       this.$emit('submit')
       this.$refs.tradeForm.clearFields()
     },

@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Utils from '@/utils/utils'
 
 const PSE_TAX = 0.006 // percent
 
@@ -116,10 +117,21 @@ export default {
 
 	// Profit
 	getTransactionsProfit(transactions) {
+		if(!Utils.isTransactionsComplete(transactions)) {
+			return 0
+		}
+		
 		return this.getTransactionsSellCost(transactions) - this.getTransactionsBuyCost(transactions)
 	},
 	getTransactionsChange(transactions) {
-		return (this.getTransactionsProfit(transactions) / this.getTransactionsBuyCost(transactions)) * 100
+		if(!Utils.isTransactionsComplete(transactions)) {
+			return 0
+		}
+
+		const profit = this.getTransactionsProfit(transactions)
+		const buyCost = this.getTransactionsBuyCost(transactions)
+
+		return buyCost == 0 ? 0 : (profit / buyCost) * 100
 	},
 
 	// Count
@@ -127,7 +139,7 @@ export default {
 		return _
 			.chain(transactions)
 			.filter({ type: transactionType })
-			.sumBy('quantity')
+			.sumBy(transaction => Number(transaction.quantity))
 			.value()
 	},
 	getBuyCount(transactions) { return this.getCount('buy', transactions) },
@@ -150,7 +162,7 @@ export default {
 		return _
 			.chain(transactions)
 			.filter({ type: transactionType })
-			.meanBy('price')
+			.meanBy(transaction => Number(transaction.price))
 			.value()
 	},
 	getAverageBuyPrice(transactions) { return this.getAveragePrice('buy', transactions) },

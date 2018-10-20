@@ -15,13 +15,13 @@
 import TradeCalc from '@/utils/trade-calc'
 import TradesTable from '@/components/presentational/TradesTable'
 import TradePlanFormModal from '@/components/presentational/TradePlanFormModal'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { TradesTable, TradePlanFormModal },
-  computed: mapState([
-    'trades',
-  ]),
+  computed: {
+    ...mapGetters(['trades'])
+  },
   data() {
     return {
       isTradePlanModalActive: false

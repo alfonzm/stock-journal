@@ -1,8 +1,8 @@
 <template lang="pug">
   form(@submit.prevent="onSubmit")
     .field
-      label.label.is-size-7 Symbol
-      input.input(type="text" placeholder="Symbol" v-model="symbol" ref="symbolInput")
+      label.label.is-size-7 Stock Code
+      input.is-uppercase.input(type="text" v-model="symbol" ref="symbolInput")
     .field
       input.input(type="hidden" value="long" v-model="position")
     .columns
@@ -14,8 +14,7 @@
         .field
           label.label.is-small Remarks
           input.input(v-model="remarks")
-    .field
-      //- label.label.is-small Transactions
+    //- .field
       .tabs
         ul
           li(:class="{ 'is-active' : type == 'simple' }" @click="type = 'simple'")
@@ -77,22 +76,22 @@
           th.is-size-7 Price
           th.is-size-7
         tbody
-          tr(v-for="transaction in transactions")
+          tr(v-for="(transaction, index) in transactions")
             td
               input.input(type="text" placeholder="Timestamp" v-model="transaction.timestamp")
             td
               .control
                 .select
-                  select
-                    option Buy
-                    option Sell
+                  select(v-model="transaction.type")
+                    option(value="buy") Buy
+                    option(value="sell") Sell
             td
               input.input(type="number" placeholder="Quantity" v-model="transaction.quantity")
             td
               input.input(type="number" placeholder="Price" v-model="transaction.price")
             //- td {{ amount(transaction.type, transaction.price, transaction.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) }}
             td
-              a.button.is-white(@click="removeTransaction")
+              a.button.is-white(@click="removeTransaction(index)")
                 span.icon
                   i.fa.fa-times.fa-lg
       .field
@@ -103,24 +102,25 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 import TradeCalc from '@/utils/trade-calc'
 
 export default {
-  mounted() {
-    this.onUpdateType(this.type)
-  },
-  watch: {
-    type(type) {
-      this.onUpdateType(type)
-    }
-  },
+  // mounted() {
+  //   this.onUpdateType(this.type)
+  // },
+  // watch: {
+  //   type(type) {
+  //     this.onUpdateType(type)
+  //   }
+  // },
   data() {
     return {
       // Trade Type (simple = 1 buy and 1 sell only. complex = many diff buy/sell prices)
-      type: 'simple',
+      type: 'complex',
 
       // Trade
+      id: null,
       symbol: null,
       position: 'long',
       remarks: null,
@@ -143,6 +143,9 @@ export default {
     }
   },
   computed: {
+    ...mapState('journal', {
+      tradeFromState: state => state.tradeFormTrade
+    }),
     riskRewardRatio() {
       return TradeCalc.getPrettyRiskRewardRatio(this.entryPrice, this.stopLossPrice, this.exitPrice)
     },
@@ -152,23 +155,37 @@ export default {
   },
   methods: {
     onShow() {
-      setTimeout(
-        () => {
-          this.$refs.symbolInput.focus()
-        },
-        100
-      )
+      setTimeout(() => this.$refs.symbolInput.focus(), 100)
+      this.copyTradeToData(this.tradeFromState)
     },
-    onUpdateType(type) {
-      if(type == 'simple') {
-        this.transactions = []
-        this.addNewTransaction({ type: 'buy' })
-        this.addNewTransaction({ type: 'sell' })
-      } else if (type == 'complex') {
-        this.transactions = []
-        this.addNewTransaction()
+    copyTradeToData(trade) {
+      if(!trade) {
+        // this.type = 'complex'
+        this.clearFields()
+      } else {
+        // this.type = 'complex'
+        this.id = trade.id
+        this.symbol = trade.symbol
+        this.position = trade.position
+        this.remarks = trade.remarks
+        this.strategy = trade.strategy
+        this.transactions = trade.transactions.slice()
       }
     },
+    // onUpdateType(type) {
+    //   if(this.transactions.length > 0) {
+    //     return
+    //   }
+
+    //   if(type == 'simple') {
+    //     this.transactions = []
+    //     this.addNewTransaction({ type: 'buy' })
+    //     this.addNewTransaction({ type: 'sell' })
+    //   } else if (type == 'complex') {
+    //     this.transactions = []
+    //     this.addNewTransaction()
+    //   }
+    // },
     onClickAddTransaction() {
       if(this.type == 'complex') {
         this.addNewTransaction()
@@ -195,7 +212,7 @@ export default {
             timestamp: this.singleTradeTimestamp,
           },
           {
-            quantity: this.singleTradeQuantity,
+            quantity: this.singleTradeExitPrice ? this.singleTradeQuantity : null,
             type: 'sell',
             price: this.singleTradeExitPrice,
             timestamp: this.singleTradeTimestamp,
@@ -204,6 +221,7 @@ export default {
       }
 
       return Object.assign({}, {
+        id: this.id,
         symbol: this.symbol,
         position: this.position,
         remarks: this.remarks,
@@ -212,6 +230,7 @@ export default {
       })
     },
     clearFields() {
+      this.id = null
       this.symbol = null
       this.remarks = null
       this.strategy = null
@@ -222,19 +241,21 @@ export default {
       this.singleTradeExitPrice = null
 
       this.transactions = []
+      this.addNewTransaction({ type: 'buy' })
+      this.addNewTransaction({ type: 'sell' })
     },
-    addTransaction() {
-      
-    },
-    removeTransaction() {
-      
+    removeTransaction(index) {
+      this.transactions.splice(index, 1)
     },
   }
 }
 </script>
 
 <style lang="sass">
-.table.is-compact
-  td
-    padding: 0
+.table
+  width: 100%
+
+  &.is-compact
+    td
+      padding: 0
 </style>

@@ -4,9 +4,9 @@
       button.button.m-l-20(@click="addTrade") Add trade
     trades-table(:trades="trades")
     trade-form-modal(
-      :active="isTradeModalActive"
+      :active="showTradeFormModal"
       @submit="onSubmit"
-      @close="isTradeModalActive = false")
+      @close="showTradeFormModal = false")
 </template>
 
 <script>
@@ -14,24 +14,28 @@
 import TradeCalc from '@/utils/trade-calc'
 import TradesTable from '@/components/presentational/TradesTable'
 import TradeFormModal from '@/components/presentational/TradeFormModal'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { TradesTable, TradeFormModal },
   computed: {
+    showTradeFormModal: {
+      get() {
+        return this.$store.state.journal.showTradeFormModal
+      },
+      set(value) {
+        this.$store.commit('journal/SET_SHOW_TRADE_FORM_MODAL', value)
+      }
+    },
     ...mapGetters(['trades'])
-  },
-  data() {
-    return {
-      isTradeModalActive: false
-    }
   },
   methods: {
     addTrade() {
-      this.isTradeModalActive = true
+      this.$store.commit('journal/SET_TRADE_FORM_TRADE', null)
+      this.$store.dispatch('journal/showTradeFormModal')
     },
     onSubmit(trade) {
-      this.isTradeModalActive = false
+      this.showTradeFormModal = false
     }
   }
 }

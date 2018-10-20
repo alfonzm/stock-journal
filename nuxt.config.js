@@ -58,15 +58,15 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    postcss: {
-      plugins: {
-        'postcss-cssnext': {
-          features: {
-            customProperties: false
-          }
-        }
-      }
-    },
+    // postcss: {
+    //   plugins: {
+    //     'postcss-cssnext': {
+    //       features: {
+    //         customProperties: false
+    //       }
+    //     }
+    //   }
+    // },
     /*
     ** You can extend webpack config here
     */

@@ -1,9 +1,12 @@
+import _ from 'lodash'
 import Vuex from 'vuex'
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
       stockSymbols: ['JFC', 'ALI', 'SMPH'],
+
+      // User's trade plans
       tradePlans: [
         {
           symbol: 'JFC',
@@ -16,63 +19,78 @@ const createStore = () => {
           quantity: 100
         }
       ],
+
+      // User's trades
       trades: [
         {
           "symbol": "ion",
           "position": "long",
           "remarks": "elliot waves",
+          "strategy": "uptrend following",
           "transactions": [
             {
               "quantity": 1000,
               "type": "buy",
               "price": 2.23,
-              "timestamp": "1000"
+              "timestamp": "1/10/2018"
             },
             {
               "quantity": 1000,
               "type": "sell",
               "price": 2.49,
-              "timestamp": "3000"
+              "timestamp": "1/12/2018"
             },
           ]
         },
         {
           "symbol": "jfc",
           "position": "long",
+          "strategy": "long term",
           "remarks": "nice",
           "transactions": [
             {
               "quantity": 100,
               "type": "buy",
               "price": 300,
-              "timestamp": "1000"
+              "timestamp": "2/1/2018"
             },
             {
               "quantity": 100,
               "type": "buy",
               "price": 310,
-              "timestamp": "1500"
+              "timestamp": "2/2/2018"
             },
             {
               "quantity": 200,
               "type": "sell",
               "price": 320,
-              "timestamp": "3000"
+              "timestamp": "2/2/2018"
             },
           ]
         },
       ]
     },
+    getters: {
+      trades: state => {
+        return _.chain(state.trades).sortBy(trade => trade.timestamp).reverse().value()
+      }
+    },
     mutations: {
-      addMyStock (state, myStock) {
+      ADD_STOCK (state, myStock) {
         state.tradePlans.push(myStock)
+      },
+      ADD_TRADE (state, trade) {
+        state.trades.push(trade)
       }
     },
     actions: {
       addMyStock({ commit }, myStock) {
-        commit('addMyStock', myStock)
+        commit('ADD_MY_STOCK', myStock)
+      },
+      addTrade({ commit }, trade) {
+        commit('ADD_TRADE', trade)
       }
-    }
+    },
   })
 }
 

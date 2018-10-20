@@ -16,7 +16,7 @@
     "@nuxtjs/font-awesome": "^1.0.3",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.10",
-    "nuxt": "^1.0.0"
+    "nuxt": "^2.2.0"
   },
   "devDependencies": {
     "coffee-loader": "^0.9.0",

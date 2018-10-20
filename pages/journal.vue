@@ -14,13 +14,13 @@
 import TradeCalc from '@/utils/trade-calc'
 import TradesTable from '@/components/presentational/TradesTable'
 import TradeFormModal from '@/components/presentational/TradeFormModal'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: { TradesTable, TradeFormModal },
-  computed: mapState([
-    'trades',
-  ]),
+  computed: {
+    ...mapGetters(['trades'])
+  },
   data() {
     return {
       isTradeModalActive: false
@@ -30,8 +30,7 @@ export default {
     addTrade() {
       this.isTradeModalActive = true
     },
-    onSubmit() {
-      alert('submit')
+    onSubmit(trade) {
       this.isTradeModalActive = false
     }
   }

@@ -4,16 +4,17 @@
     .modal-card
       header.modal-card-head
         p.modal-card-title Add trade
-        button.delete(aria-label="close" @click="close")
+        button.delete(aria-label="close" @click="onCancel")
       section.modal-card-body
         trade-form(@submit="addStock" ref="tradeForm")
       footer.modal-card-foot
         button.button.is-primary.float-right(@click="submit") Add trade plan
-        button.button(@click="close") Cancel
+        button.button(@click="onCancel") Cancel
 </template>
 
 <script>
 
+import { mapActions } from 'vuex'
 import TradeForm from '@/components/presentational/TradeForm.vue'
 
 export default {
@@ -33,6 +34,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addTrade']),
     onShow() {
       this.$refs.tradeForm.onShow()
     },
@@ -42,12 +44,15 @@ export default {
     addStock() {
 
     },
-    close() {
+    onCancel() {
       this.$emit('close')
       this.onClose()
     },
     submit() {
+      const tradeFormData = this.$refs.tradeForm.getTradeFormData()
+      this.addTrade(tradeFormData)
       this.$emit('submit')
+      this.$refs.tradeForm.clearFields()
     },
   }
 }

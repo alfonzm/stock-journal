@@ -16,6 +16,7 @@ export default {
     return {
       routes: [
         { url: 'dashboard', name: 'Dashboard' },
+        { url: 'portfolio', name: 'Portfolio' },
         { url: 'journal', name: 'Journal' },
         { url: 'add-trade', name: 'Add Trade' },
         { url: 'add-trade-plan', name: 'Add Trade Plan' },

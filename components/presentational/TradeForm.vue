@@ -5,9 +5,15 @@
       input.input(type="text" placeholder="Symbol" v-model="symbol" ref="symbolInput")
     .field
       input.input(type="hidden" value="long" v-model="position")
-    .field
-      label.label.is-small Remarks
-      textarea.textarea(rows="2" v-model="remarks")
+    .columns
+      .column
+        .field
+          label.label.is-small Strategy
+          input.input(v-model="strategy")
+      .column
+        .field
+          label.label.is-small Remarks
+          input.input(v-model="remarks")
     .field
       //- label.label.is-small Transactions
       .tabs
@@ -34,62 +40,52 @@
       | {{ amount(transaction.type, transaction.price, transaction.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) }}
       a.button(@click="removeTransaction") x
 
+    //- Single Trade
     template(v-if="type == 'simple'")
       .field.is-horizontal
         .field-body
           .field
             label.label.is-small Timestamp
             .control
-              input.input(type="number" placeholder="Timestamp" v-model="timestamp")
+              input.input(type="number" placeholder="Timestamp" v-model="singleTradeTimestamp")
           .field
             label.label.is-small Quantity
             .control
-              input.input(type="number" placeholder="Quantity" v-model="quantity")
+              input.input(type="number" placeholder="Quantity" v-model="singleTradeQuantity")
       .field.is-horizontal
         .field-body
           .field
             label.label.is-small Buy Price
             .control
-              input.input(type="number" placeholder="Buy Price" v-model="entryPrice")
+              input.input(type="number" placeholder="Buy Price" v-model="singleTradeEntryPrice")
             //- p.help
               | Net buy: {{ buyCost }}
           .field
             label.label.is-small Sell Price
             .control
-              input.input(type="number" placeholder="Sell Price" v-model="exitPrice")
+              input.input(type="number" placeholder="Sell Price" v-model="singleTradeExitPrice")
             //- p.help
               | Net sell: {{ sellCost }}
       
+    //- Multiple Trades
     template(v-else)
-      .field
-        button.button(@click="onClickAddTransaction")
-          span Add transaction +
-
       table.table
         thead
-          th.is-size-7 Type
           th.is-size-7 Timestamp
+          th.is-size-7 Type
           th.is-size-7 Quantity
           th.is-size-7 Price
-          //- th.is-size-7 Amount
           th.is-size-7
         tbody
           tr(v-for="transaction in transactions")
+            td
+              input.input(type="text" placeholder="Timestamp" v-model="transaction.timestamp")
             td
               .control
                 .select
                   select
                     option Buy
                     option Sell
-              //- .control
-                label.radio
-                  input(type="radio" value="buy" v-model="transaction.type")
-                  |  Buy
-                label.radio
-                  input(type="radio" value="sell" v-model="transaction.type")
-                  |  Sell
-            td
-              input.input(type="text" placeholder="Timestamp" v-model="transaction.timestamp")
             td
               input.input(type="number" placeholder="Quantity" v-model="transaction.quantity")
             td
@@ -99,7 +95,9 @@
               a.button.is-white(@click="removeTransaction")
                 span.icon
                   i.fa.fa-times.fa-lg
-
+      .field
+        button.button(@click.prevent="onClickAddTransaction")
+          span Add transaction +
     //- .field
       input.button.is-primary(type="submit" value="Save trade")
 </template>
@@ -119,14 +117,21 @@ export default {
   },
   data() {
     return {
-      // type (simple = 1 buy and 1 sell only. complex = many diff buy/sell prices)
+      // Trade Type (simple = 1 buy and 1 sell only. complex = many diff buy/sell prices)
       type: 'simple',
 
       // Trade
       symbol: null,
       position: 'long',
       remarks: null,
+      strategy: null,
       transactions: [],
+
+      // Single transaction
+      singleTradeTimestamp: null,
+      singleTradeQuantity: null,
+      singleTradeEntryPrice: null,
+      singleTradeExitPrice: null,
 
       // Empty transaction template
       emptyTransaction: {
@@ -177,12 +182,46 @@ export default {
       return TradeCalc.getAmount(type, price, quantity)
     },
     onSubmit() {
-      this.$emit('submit', { 
+      this.$emit('submit', this.getTradeFormData())
+      this.clearFields()
+    },
+    getTradeFormData() {
+      if (this.type == 'simple') {
+        this.transactions = [
+          {
+            quantity: this.singleTradeQuantity,
+            type: 'buy',
+            price: this.singleTradeEntryPrice,
+            timestamp: this.singleTradeTimestamp,
+          },
+          {
+            quantity: this.singleTradeQuantity,
+            type: 'sell',
+            price: this.singleTradeExitPrice,
+            timestamp: this.singleTradeTimestamp,
+          },
+        ]
+      }
+
+      return Object.assign({}, {
         symbol: this.symbol,
         position: this.position,
         remarks: this.remarks,
+        strategy: this.strategy,
         transactions: this.transactions,
       })
+    },
+    clearFields() {
+      this.symbol = null
+      this.remarks = null
+      this.strategy = null
+
+      this.singleTradeTimestamp = null
+      this.singleTradeQuantity = null
+      this.singleTradeEntryPrice = null
+      this.singleTradeExitPrice = null
+
+      this.transactions = []
     },
     addTransaction() {
       

@@ -27,6 +27,7 @@ When adding a trade entry, a trade can be simple/complex. This is not saved to t
 
 - symbol
 - remarks
+- strategy
 - position (long/short)
 - [transactions]
 	- type (buy/sell)

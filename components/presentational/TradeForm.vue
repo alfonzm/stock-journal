@@ -1,23 +1,31 @@
 <template lang="pug">
   form(@submit.prevent="onSubmit")
-    h1.title Add a trade
-
-    h2 Trade
     .field
-      input.input(type="text" placeholder="Symbol" v-model="symbol")
+      label.label.is-size-7 Symbol
+      input.input(type="text" placeholder="Symbol" v-model="symbol" ref="symbolInput")
     .field
       input.input(type="hidden" value="long" v-model="position")
     .field
-      input.input(type="text" placeholder="Remarks" v-model="remarks")
+      label.label.is-small Remarks
+      textarea.textarea(rows="2" v-model="remarks")
+    .field
+      //- label.label.is-small Transactions
+      .tabs
+        ul
+          li(:class="{ 'is-active' : type == 'simple' }" @click="type = 'simple'")
+            strong
+              a Single
+          li(:class="{ 'is-active' : type == 'complex' }" @click="type = 'complex'")
+            strong 
+              a Multiple
+    //- .field
       .control
         label.radio
           input(type="radio" value="simple" v-model="type")
-          |  Simple
+          |  Single
         label.radio
           input(type="radio" value="complex" v-model="type")
-          |  Complex
-
-    br
+          |  Multiple
     
     //- template(v-if="type == 'simple'")
       input.input(type="text" placeholder="Timestamp" v-model="transaction.timestamp")
@@ -26,22 +34,54 @@
       | {{ amount(transaction.type, transaction.price, transaction.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) }}
       a.button(@click="removeTransaction") x
 
-    template
-      strong Transactions
-      button.button(v-if="type == 'complex'" @click="onClickAddTransaction") Add transaction
+    template(v-if="type == 'simple'")
+      .field.is-horizontal
+        .field-body
+          .field
+            label.label.is-small Timestamp
+            .control
+              input.input(type="number" placeholder="Timestamp" v-model="timestamp")
+          .field
+            label.label.is-small Quantity
+            .control
+              input.input(type="number" placeholder="Quantity" v-model="quantity")
+      .field.is-horizontal
+        .field-body
+          .field
+            label.label.is-small Buy Price
+            .control
+              input.input(type="number" placeholder="Buy Price" v-model="entryPrice")
+            //- p.help
+              | Net buy: {{ buyCost }}
+          .field
+            label.label.is-small Sell Price
+            .control
+              input.input(type="number" placeholder="Sell Price" v-model="exitPrice")
+            //- p.help
+              | Net sell: {{ sellCost }}
+      
+    template(v-else)
+      .field
+        button.button(@click="onClickAddTransaction")
+          span Add transaction +
 
-      table.table.is-fullwidth
+      table.table
         thead
-          th Type
-          th Timestamp
-          th Quantity
-          th Price
-          th Amount
-          th Remove
+          th.is-size-7 Type
+          th.is-size-7 Timestamp
+          th.is-size-7 Quantity
+          th.is-size-7 Price
+          //- th.is-size-7 Amount
+          th.is-size-7
         tbody
           tr(v-for="transaction in transactions")
             td
               .control
+                .select
+                  select
+                    option Buy
+                    option Sell
+              //- .control
                 label.radio
                   input(type="radio" value="buy" v-model="transaction.type")
                   |  Buy
@@ -54,11 +94,13 @@
               input.input(type="number" placeholder="Quantity" v-model="transaction.quantity")
             td
               input.input(type="number" placeholder="Price" v-model="transaction.price")
-            td {{ amount(transaction.type, transaction.price, transaction.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) }}
+            //- td {{ amount(transaction.type, transaction.price, transaction.quantity).toLocaleString(undefined, {minimumFractionDigits: 2}) }}
             td
-              a.button(@click="removeTransaction") x
+              a.button.is-white(@click="removeTransaction")
+                span.icon
+                  i.fa.fa-times.fa-lg
 
-    .field
+    //- .field
       input.button.is-primary(type="submit" value="Save trade")
 </template>
 
@@ -78,7 +120,7 @@ export default {
   data() {
     return {
       // type (simple = 1 buy and 1 sell only. complex = many diff buy/sell prices)
-      type: 'complex',
+      type: 'simple',
 
       // Trade
       symbol: null,
@@ -104,6 +146,14 @@ export default {
     },
   },
   methods: {
+    onShow() {
+      setTimeout(
+        () => {
+          this.$refs.symbolInput.focus()
+        },
+        100
+      )
+    },
     onUpdateType(type) {
       if(type == 'simple') {
         this.transactions = []
@@ -144,5 +194,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
+.table.is-compact
+  td
+    padding: 0
 </style>

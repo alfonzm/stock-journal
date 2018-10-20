@@ -4,7 +4,7 @@
       h1.title Plans
         button.button.m-l-20(@click="addPlan") Add plan
       trades-table(:trades="trades")
-      trade-plan-modal(
+      trade-plan-form-modal(
         :active="isTradePlanModalActive"
         @submit="onSubmit"
         @close="isTradePlanModalActive = false")
@@ -14,11 +14,11 @@
 
 import TradeCalc from '@/utils/trade-calc'
 import TradesTable from '@/components/presentational/TradesTable'
-import TradePlanModal from '@/components/presentational/TradePlanModal'
+import TradePlanFormModal from '@/components/presentational/TradePlanFormModal'
 import { mapState } from 'vuex'
 
 export default {
-  components: { TradesTable, TradePlanModal },
+  components: { TradesTable, TradePlanFormModal },
   computed: mapState([
     'trades',
   ]),

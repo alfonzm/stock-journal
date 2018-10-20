@@ -13,6 +13,8 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "@nuxtjs/bulma": "^1.0.3",
+    "@nuxtjs/font-awesome": "^1.0.3",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.10",
     "nuxt": "^1.0.0"
   },

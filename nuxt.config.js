@@ -28,6 +28,7 @@ module.exports = {
   */
   css: [
     '@assets/css/common.sass',
+    { src: 'font-awesome/scss/font-awesome.scss', lang: 'scss' }
   ],
 
   /*
@@ -43,7 +44,8 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
-    '@nuxtjs/bulma'
+    '@nuxtjs/bulma',
+    '@nuxtjs/font-awesome'
   ],
   /*
   ** Axios module configuration

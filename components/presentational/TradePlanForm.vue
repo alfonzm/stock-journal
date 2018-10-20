@@ -5,7 +5,7 @@
         .field
           label.label.is-small Symbol
           .control
-            input.input.is-normal.is-uppercase(type="text" placeholder="Symbol" v-model="symbol" ref="symbolInput")
+            input.input.is-normal(type="text" placeholder="Symbol" v-model="symbol" ref="symbolInput")
         .field
           label.label.is-small Quantity
           .control

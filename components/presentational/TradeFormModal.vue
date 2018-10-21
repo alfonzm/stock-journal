@@ -66,6 +66,7 @@ export default {
     },
     onDelete(trade) {
       this.deleteTrade(trade)
+      this.onCancel()
     },
     submit() {
       const tradeFormData = this.$refs.tradeForm.getTradeFormData()

@@ -3,10 +3,7 @@
     h1.title Journal
       button.button.m-l-20(@click="addTrade") Add trade
     trades-table(:trades="trades")
-    trade-form-modal(
-      :active="showTradeFormModal"
-      @submit="onSubmit"
-      @close="showTradeFormModal = false")
+    trade-form-modal(@submit="onSubmit")
 </template>
 
 <script>

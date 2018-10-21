@@ -111,6 +111,9 @@ const createStore = () => {
         const tradeToReplace = state.trades.find(t => t.id == trade.id)
         Object.assign(tradeToReplace, trade)
       },
+      DELETE_TRADE (state, trade) {
+        state.trades.splice(_.findIndex(state.trades, t => t.id == trade.id), 1)
+      },
     },
     actions: {
       addMyStock({ commit }, myStock) {
@@ -121,8 +124,12 @@ const createStore = () => {
         commit('ADD_TRADE', trade)
       },
       updateTrade({ state, commit }, trade) {
-        // _.find(state.trades, { id: trade.id })
         commit('UPDATE_TRADE', trade)
+      },
+      deleteTrade({ state, commit }, trade) {
+        if(confirm(`Are you sure you want to delete this trade: ${trade.symbol.toUpperCase()}?`)) {
+          commit('DELETE_TRADE', trade)
+        }
       }
     },
     modules: {

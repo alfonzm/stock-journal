@@ -76,7 +76,6 @@ export default {
         this.addTrade(tradeFormData)
       }
       this.$emit('submit')
-      this.$refs.tradeForm.clearFields()
     },
   }
 }

@@ -1,5 +1,5 @@
 <template lang="pug">
-  form(@submit.prevent="onSubmit")
+  form.trade-form(@submit.prevent="onSubmit")
     .field
       label.label.is-size-7 Stock Code
       input.is-uppercase.input(type="text" v-model="symbol" ref="symbolInput")
@@ -94,9 +94,11 @@
               a.button.is-white(@click="removeTransaction(index)")
                 span.icon
                   i.fa.fa-times.fa-lg
-      .field
-        button.button(@click.prevent="onClickAddTransaction")
-          span Add transaction +
+          tr
+            td
+              .field
+                button.button.is-rounded.is-small(@click.prevent="onClickAddTransaction" type="button")
+                  span Add transaction +
     //- .field
       input.button.is-primary(type="submit" value="Save trade")
 </template>
@@ -252,10 +254,17 @@ export default {
 </script>
 
 <style lang="sass">
-.table
-  width: 100%
+.trade-form
+  .table
+    width: 100%
 
-  &.is-compact
-    td
-      padding: 0
+    thead th
+      border-width: 0 0 1px
+
+    tr td
+      border: none
+
+    &.is-compact
+      td
+        padding: 0
 </style>

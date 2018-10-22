@@ -14,14 +14,14 @@ export default [
       },
       {
         "quantity": 1000,
-        "type": "buy",
-        "price": 2.23,
+        "type": "sell",
+        "price": 2.49,
         "timestamp": "1/10/2018"
       },
       {
         "quantity": 1000,
-        "type": "sell",
-        "price": 2.49,
+        "type": "buy",
+        "price": 2.23,
         "timestamp": "1/10/2018"
       },
       {
@@ -118,21 +118,21 @@ export default [
     "remarks": "",
     "transactions": [
       {
-        "quantity": 1000,
+        "quantity": 3000,
         "type": "buy",
         "price": 2.3,
         "timestamp": "3/5/2018"
       },
-      // {
-      //   "quantity": 1000,
-      //   "type": "buy",
-      //   "price": 2.3,
-      //   "timestamp": "3/5/2018"
-      // },
       {
-        "quantity": 500,
+        "quantity": 2000,
         "type": "sell",
         "price": 2.4,
+        "timestamp": "3/5/2018"
+      },
+      {
+        "quantity": 1000,
+        "type": "sell",
+        "price": 2.5,
         "timestamp": "3/5/2018"
       },
     ]

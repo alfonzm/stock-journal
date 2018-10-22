@@ -158,6 +158,7 @@ export default {
 		return _
 			.chain(transactions)
 			.filter({ type: transactionType })
+			.orderBy(['timestamp'], ['desc'])
 			.map('timestamp')
 			.first()
 			.value()

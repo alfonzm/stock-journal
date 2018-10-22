@@ -22,14 +22,15 @@
           td {{ trade.strategy }}
           td {{ trade.remarks }}
           td
-            | {{ currencify(getAverageBuyPrice(trade.transactions), 4) }} ({{ commafy(getTotalBuyQuantity(trade.transactions)) }})
+            template(v-if="getAverageBuyPrice(trade.transactions) > 0")
+              | {{ currencify(getAverageBuyPrice(trade.transactions), 4) }} ({{ commafy(getTotalBuyQuantity(trade.transactions)) }})
           td
-            template(v-if="getAverageSellPrice(trade.transactions) > 0")
-              //- | {{ getSellCount(trade.transactions) }} @ {{ getAverageSellPrice(trade.transactions) }}
+            template(v-if="getAverageSellPrice(trade.transactions) > 0 && isTradeComplete(trade)")
               | {{ currencify(getAverageSellPrice(trade.transactions), 4) }} ({{ commafy(getTotalSellQuantity(trade.transactions)) }})
           td {{ currencify(getTransactionsBuyCost(trade.transactions), 2) }}
-          td {{ currencify(getTransactionsSellCost(trade.transactions), 2) }}
-          //- td.has-text-weight-bold(:class="`text-${greenOrRed(profit(trade))}`") {{ currencify(profit(trade), 2) }}
+          td
+            template(v-if="isTradeComplete(trade)")
+              | {{ currencify(getTransactionsSellCost(trade.transactions), 2) }}
           td
             green-red-text(:value="profit(trade)")
           td

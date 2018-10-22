@@ -9,7 +9,7 @@ import Utils from '@/utils/utils'
 
 export default {
   props: {
-    value: Number,
+    value: [String, Number],
     decimalPlaces: Number
   },
   methods: {

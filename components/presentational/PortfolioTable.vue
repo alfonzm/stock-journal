@@ -11,7 +11,7 @@
         th Profit/Loss
         th Change
       tbody
-        tr(v-for="transactions, symbol in stocks")
+        tr(v-for="transactions, symbol in stocksSortedByTimestamp")
           td.is-uppercase.has-text-weight-bold {{ symbol }}
           td {{ getRemainingQuantity(transactions) }}
           td {{ marketPrice(symbol) ? currencify(marketPrice(symbol), 4) : null }}
@@ -52,6 +52,9 @@ export default {
     ...mapGetters('pse', ['getStockPrice']),
     lastUpdated() {
       return this.timestamp ? moment(this.timestamp).format('MMM DD, YYYY hh:mm:ss a') : ''
+    },
+    stocksSortedByTimestamp() {
+      return this.stocks
     },
   },
   methods: {

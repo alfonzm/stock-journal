@@ -37,7 +37,7 @@ export default {
     trades: state => {
       return _.chain(state.trades).sortBy(trade => trade.timestamp).reverse().value()
     },
-    stocksInPortfolio: state => {
+    portfolioStocks: state => {
       // returns all stocks owned by user based on trades
       // each stock contains the transactions
       // filtered by if user still holding the stocks (e.g. if buy 100 sold 100, it's not included)

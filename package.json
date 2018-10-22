@@ -4,8 +4,9 @@
   "description": "My terrific Nuxt.js project",
   "author": "Alfonz",
   "private": true,
+  "main": "server/server.js",
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nodemon --watch api --exec \"nuxt\"",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate"
@@ -14,8 +15,13 @@
     "@nuxtjs/axios": "^5.0.0",
     "@nuxtjs/bulma": "^1.0.3",
     "@nuxtjs/font-awesome": "^1.0.3",
+    "@nuxtjs/moment": "^1.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "morgan": "^1.9.1",
     "nuxt": "^2.2.0"
   },
   "devDependencies": {
@@ -23,6 +29,7 @@
     "coffeescript": "^2.3.1",
     "cross-env": "^5.0.1",
     "node-sass": "^4.9.3",
+    "nodemon": "^1.18.4",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
     "sass-loader": "^7.1.0"

@@ -22,26 +22,33 @@
           td {{ trade.strategy }}
           td {{ trade.remarks }}
           td
-            //- | {{ getBuyCount(trade.transactions) }} @ {{ getAverageBuyPrice(trade.transactions) }}
-            | {{ currencify(getAverageBuyPrice(trade.transactions), 2) }} ({{ commafy(getBuyCount(trade.transactions)) }})
+            | {{ currencify(getAverageBuyPrice(trade.transactions), 4) }} ({{ commafy(getTotalBuyQuantity(trade.transactions)) }})
           td
             template(v-if="getAverageSellPrice(trade.transactions) > 0")
               //- | {{ getSellCount(trade.transactions) }} @ {{ getAverageSellPrice(trade.transactions) }}
-              | {{ currencify(getAverageSellPrice(trade.transactions), 2) }} ({{ commafy(getSellCount(trade.transactions)) }})
+              | {{ currencify(getAverageSellPrice(trade.transactions), 4) }} ({{ commafy(getTotalSellQuantity(trade.transactions)) }})
           td {{ currencify(getTransactionsBuyCost(trade.transactions), 2) }}
           td {{ currencify(getTransactionsSellCost(trade.transactions), 2) }}
-          td.has-text-weight-bold(:class="`text-${greenOrRed(profit(trade))}`") {{ currencify(profit(trade), 2) }}
-          td.has-text-weight-bold(:class="`text-${greenOrRed(profit(trade))}`") {{ getTransactionsChange(trade.transactions).toFixed(2) }}%
+          //- td.has-text-weight-bold(:class="`text-${greenOrRed(profit(trade))}`") {{ currencify(profit(trade), 2) }}
+          td
+            green-red-text(:value="profit(trade)")
+          td
+            green-red-text(:value="getTransactionsChange(trade.transactions).toFixed(2)")
+              | %
 </template>
 
 <script>
 import Utils from '@/utils/utils'
 import TradeCalc from '@/utils/trade-calc'
+import GreenRedText from '@/components/presentational/GreenRedText'
 
 export default {
   props: [
     'trades', // array of Trade
   ],
+  components: {
+    GreenRedText
+  },
   methods: {
     ...TradeCalc,
     ...Utils,

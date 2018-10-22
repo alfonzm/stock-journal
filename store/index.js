@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import journal from '@/store/journal'
 import trades from '@/store/trades'
+import pse from '@/store/pse'
 
 const createStore = () => {
   return new Vuex.Store({
@@ -35,7 +36,8 @@ const createStore = () => {
     },
     modules: {
       journal,
-      trades
+      trades,
+      pse,
     }
   })
 }

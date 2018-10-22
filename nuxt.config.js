@@ -45,7 +45,8 @@ module.exports = {
     '@nuxtjs/axios',
     // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
     '@nuxtjs/bulma',
-    '@nuxtjs/font-awesome'
+    '@nuxtjs/font-awesome',
+    '@nuxtjs/moment',
   ],
   /*
   ** Axios module configuration
@@ -58,6 +59,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    vendor: ['axios'],
     // postcss: {
     //   plugins: {
     //     'postcss-cssnext': {
@@ -73,5 +75,8 @@ module.exports = {
     extend(config, ctx) {
       
     }
-  }
+  },
+  serverMiddleware: [
+    '~/api/index.js'
+  ]
 }

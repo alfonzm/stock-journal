@@ -12,7 +12,7 @@ export default {
 
 		const gross = price * quantity
 
-		const commission = (0.0025*gross) > 20 ? (0.0025 * gross) : 20
+		const commission = (0.0025 * gross) > 20 ? (0.0025 * gross) : 20
 		const vat = commission * 0.12
 		const pseFee = 0.00005 * gross
 		const sccpFee = 0.0001 * gross
@@ -115,6 +115,14 @@ export default {
 	getTransactionsBuyCost(transactions) { return this.getTransactionsCost('buy', transactions) },
 	getTransactionsSellCost(transactions) { return this.getTransactionsCost('sell', transactions) },
 
+	// Get cost of remaining stocks held
+	getRemainingBuyCost(transactions) {
+		return this.getTransactionsBuyCost(transactions) - this.getTransactionsSellCost(transactions)
+		// this.getBuyCost(transaction.price, this.getRemainingQuantity(transactions))
+	},
+	getTransactionsBuyCost(transactions) { return this.getTransactionsCost('buy', transactions) },
+	getTransactionsSellCost(transactions) { return this.getTransactionsCost('sell', transactions) },
+
 	// Profit
 	getTransactionsProfit(transactions) {
 		if(!Utils.isTransactionsComplete(transactions)) {
@@ -134,16 +142,16 @@ export default {
 		return buyCost == 0 ? 0 : (profit / buyCost) * 100
 	},
 
-	// Count
-	getCount(transactionType, transactions) {
+	// Get shares quantity of transactions per type
+	getTotalQuantityByTransactionType(transactionType, transactions) {
 		return _
 			.chain(transactions)
 			.filter({ type: transactionType })
 			.sumBy(transaction => Number(transaction.quantity))
 			.value()
 	},
-	getBuyCount(transactions) { return this.getCount('buy', transactions) },
-	getSellCount(transactions) { return this.getCount('sell', transactions) },
+	getTotalBuyQuantity(transactions) { return this.getTotalQuantityByTransactionType('buy', transactions) },
+	getTotalSellQuantity(transactions) { return this.getTotalQuantityByTransactionType('sell', transactions) },
 
 	// Timestamp
 	getTimestamp(transactionType, transactions) {
@@ -158,13 +166,24 @@ export default {
 	getSellTimestamp(transactions) { return this.getTimestamp('sell', transactions) },
 
 	// Average price
-	getAveragePrice(transactionType, transactions) {
-		return _
-			.chain(transactions)
-			.filter({ type: transactionType })
-			.meanBy(transaction => Number(transaction.price))
-			.value()
+	// getAveragePrice(transactionType, transactions) {
+	// 	return _
+	// 		.chain(transactions)
+	// 		.filter({ type: transactionType })
+	// 		.meanBy(transaction => Number(transaction.price))
+	// 		.value()
+	// },
+	getAverageBuyPrice(transactions) {
+		return this.getTransactionsBuyCost(transactions) / this.getTotalBuyQuantity(transactions)
 	},
-	getAverageBuyPrice(transactions) { return this.getAveragePrice('buy', transactions) },
-	getAverageSellPrice(transactions) { return this.getAveragePrice('sell', transactions) },
+	getAverageSellPrice(transactions) {
+		return this.getTransactionsSellCost(transactions) / this.getTotalSellQuantity(transactions)
+	},
+
+	// Get remaining number of stocks held
+	getRemainingQuantity(transactions) {
+		return _.reduce(transactions, (total, tx) => {
+      return total + (Number(tx.quantity) * (tx.type == 'buy' ? 1 : -1))
+    }, 0)
+	}
 }

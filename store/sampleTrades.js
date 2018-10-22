@@ -12,13 +12,25 @@ export default [
         "price": 2.23,
         "timestamp": "1/10/2018"
       },
-            // {
-            //   "quantity": 1000,
-            //   "type": "sell",
-            //   "price": 2.49,
-            //   "timestamp": "1/12/2018"
-            // },
-          ]
+      {
+        "quantity": 1000,
+        "type": "buy",
+        "price": 2.23,
+        "timestamp": "1/10/2018"
+      },
+      {
+        "quantity": 1000,
+        "type": "sell",
+        "price": 2.49,
+        "timestamp": "1/10/2018"
+      },
+      {
+        "quantity": 1000,
+        "type": "sell",
+        "price": 2.49,
+        "timestamp": "1/10/2018"
+      },
+    ]
   },
   {
     "id": 2,
@@ -28,21 +40,15 @@ export default [
     "remarks": "nice",
     "transactions": [
       {
-        "quantity": 100,
+        "quantity": 30,
         "type": "buy",
-        "price": 300,
+        "price": 278,
         "timestamp": "2/1/2018"
       },
       {
-        "quantity": 100,
+        "quantity": 30,
         "type": "buy",
-        "price": 310,
-        "timestamp": "2/2/2018"
-      },
-      {
-        "quantity": 200,
-        "type": "sell",
-        "price": 320,
+        "price": 248.2,
         "timestamp": "2/2/2018"
       },
     ]
@@ -82,8 +88,8 @@ export default [
         "timestamp": "3/1/2018"
       },
       {
-        "quantity": 30,
-        "type": "buy",
+        "quantity": 100,
+        "type": "sell",
         "price": 31.5,
         "timestamp": "3/1/2018"
       },
@@ -101,6 +107,33 @@ export default [
         "type": "buy",
         "price": 29.5,
         "timestamp": "3/1/2018"
+      },
+    ]
+  },
+  {
+    "id": 6,
+    "symbol": "vul",
+    "position": "",
+    "strategy": "",
+    "remarks": "",
+    "transactions": [
+      {
+        "quantity": 1000,
+        "type": "buy",
+        "price": 2.3,
+        "timestamp": "3/5/2018"
+      },
+      // {
+      //   "quantity": 1000,
+      //   "type": "buy",
+      //   "price": 2.3,
+      //   "timestamp": "3/5/2018"
+      // },
+      {
+        "quantity": 500,
+        "type": "sell",
+        "price": 2.4,
+        "timestamp": "3/5/2018"
       },
     ]
   },

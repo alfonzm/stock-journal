@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import TradeCalc from '@/utils/trade-calc'
 import sampleTrades from './sampleTrades.js'
 
 export default {
@@ -35,6 +36,51 @@ export default {
   getters: {
     trades: state => {
       return _.chain(state.trades).sortBy(trade => trade.timestamp).reverse().value()
-    }
+    },
+    stocksInPortfolio: state => {
+      // returns all stocks owned by user based on trades
+      // each stock contains the transactions
+      // filtered by if user still holding the stocks (e.g. if buy 100 sold 100, it's not included)
+      //
+      // sample:
+      // "jfc": [
+      //   {
+      //     "quantity": 100,
+      //     "type": "buy",
+      //     "price": 300,
+      //     "timestamp": "2/1/2018"
+      //   },
+      //   {
+      //     "quantity": 100,
+      //     "type": "buy",
+      //     "price": 310,
+      //     "timestamp": "2/2/2018"
+      //   },
+      //   {
+      //     "quantity": 200,
+      //     "type": "sell",
+      //     "price": 320,
+      //     "timestamp": "2/2/2018"
+      //   }
+      // ],
+      // "smph": [
+      //   ...
+      // ]
+      let stockTransactions = {}
+
+      _.forEach(state.trades, trade => {
+        if(!(trade.symbol in stockTransactions)) {
+          if(TradeCalc.getRemainingQuantity(trade.transactions) <= 0) {
+            return
+          }
+
+          stockTransactions[trade.symbol] = []
+        }
+        
+        stockTransactions[trade.symbol] = stockTransactions[trade.symbol].concat(trade.transactions)
+      })
+
+      return stockTransactions
+    },
   }
 }

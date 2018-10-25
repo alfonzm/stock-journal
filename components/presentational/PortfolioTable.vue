@@ -10,6 +10,16 @@
         th Market Value
         th Profit/Loss
         th Change
+      tfoot
+        th
+        th
+        th
+        th
+        th.has-text-right(colspan="2") Portfolio Gain/Loss:
+        th
+          green-red-text(:value="currencify(portfolioGainLoss, 2)")
+        th
+          green-red-text(:value="portfolioChange") %
       tbody
         tr(v-for="transactions, symbol in stocksSortedByTimestamp")
           td.is-uppercase.has-text-weight-bold {{ symbol }}
@@ -55,6 +65,22 @@ export default {
     },
     stocksSortedByTimestamp() {
       return this.stocks
+    },
+    portfolioBuyCost() {
+      return _.reduce(this.stocksSortedByTimestamp, (total, transactions) => {
+        return total + this.getTransactionsBuyCost(transactions)
+      }, 0)
+    },
+    portfolioMarketPrice() {
+      return _.reduce(this.stocksSortedByTimestamp, (total, transactions, symbol) => {
+        return total + this.marketValue(transactions, symbol)
+      }, 0)
+    },
+    portfolioGainLoss() {
+      return this.portfolioMarketPrice && this.portfolioBuyCost ? this.portfolioMarketPrice - this.portfolioBuyCost : 0
+    },
+    portfolioChange() {
+      return this.portfolioBuyCost && this.portfolioGainLoss ? (this.portfolioGainLoss / this.portfolioBuyCost)*100 : 0
     },
   },
   methods: {

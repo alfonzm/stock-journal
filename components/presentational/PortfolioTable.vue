@@ -60,21 +60,12 @@ export default {
       timestamp: 'timestamp'
     }),
     ...mapGetters('pse', ['getStockPrice']),
+    ...mapGetters(['portfolioBuyCost', 'portfolioMarketPrice']),
     lastUpdated() {
       return this.timestamp ? moment(this.timestamp).format('MMM DD, YYYY hh:mm:ss a') : ''
     },
     stocksSortedByTimestamp() {
       return this.stocks
-    },
-    portfolioBuyCost() {
-      return _.reduce(this.stocksSortedByTimestamp, (total, transactions) => {
-        return total + this.getTransactionsBuyCost(transactions)
-      }, 0)
-    },
-    portfolioMarketPrice() {
-      return _.reduce(this.stocksSortedByTimestamp, (total, transactions, symbol) => {
-        return total + this.marketValue(transactions, symbol)
-      }, 0)
     },
     portfolioGainLoss() {
       return this.portfolioMarketPrice && this.portfolioBuyCost ? this.portfolioMarketPrice - this.portfolioBuyCost : 0
@@ -87,9 +78,6 @@ export default {
     ...TradeCalc,
     ...Utils,
     ...mapActions('pse', ['retrieveStockPrices', 'getStockData']),
-    // totalCost(transactions) {
-    //   return this.getBuyCost(this.marketPrice(symbol), this.getRemainingQuantity(transactions))
-    // },
     marketPrice(symbol) {
       return this.getStockPrice(symbol)
     },

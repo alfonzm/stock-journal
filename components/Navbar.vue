@@ -16,10 +16,11 @@ export default {
     return {
       routes: [
         { url: 'dashboard', name: 'Dashboard' },
+        { url: 'account', name: 'Account' },
         { url: 'portfolio', name: 'Portfolio' },
         { url: 'journal', name: 'Journal' },
-        { url: 'add-trade', name: 'Add Trade' },
-        { url: 'add-trade-plan', name: 'Add Trade Plan' },
+        // { url: 'add-trade', name: 'Add Trade' },
+        // { url: 'add-trade-plan', name: 'Add Trade Plan' },
         { url: 'plans', name: 'Plans' },
         { url: 'calculator', name: 'Calculator' },
       ]

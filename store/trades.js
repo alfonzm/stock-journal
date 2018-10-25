@@ -3,9 +3,10 @@ import TradeCalc from '@/utils/trade-calc'
 import sampleTrades from './sampleTrades.js'
 
 export default {
+  namespaced: false,
   state: {
     // User's trades
-      trades: sampleTrades
+    trades: sampleTrades
   },
   actions: {
     addTrade({ commit }, trade) {
@@ -38,9 +39,8 @@ export default {
       return _.chain(state.trades).sortBy(trade => trade.timestamp).reverse().value()
     },
     portfolioStocks: state => {
-      // returns all stocks owned by user based on trades
+      // returns user's current portfolio as dictionary with structure: "stockSymbol: [transactions]"
       // each stock contains the transactions
-      // filtered by if user still holding the stocks (e.g. if buy 100 sold 100, it's not included)
       //
       // sample:
       // "jfc": [
@@ -82,5 +82,20 @@ export default {
 
       return stockTransactions
     },
+    portfolioBuyCost: (state, getters) => {
+      return _.reduce(getters.portfolioStocks, (total, transactions) => {
+        return total + TradeCalc.getTransactionsBuyCost(transactions)
+      }, 0)
+    },
+    portfolioMarketPrice: (state, getters, rootState, rootGetters) => {
+      if(rootState.pse.timestamp == null) {
+        return
+      }
+
+      return _.reduce(getters.portfolioStocks, (total, transactions, symbol) => {
+        const marketValue = TradeCalc.getSellCost(rootGetters['pse/getStockPrice'](symbol), TradeCalc.getRemainingQuantity(transactions))
+        return total + marketValue
+      }, 0)
+    }
   }
 }

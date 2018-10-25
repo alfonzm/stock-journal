@@ -5,8 +5,9 @@ export default {
   getStock(symbol) {
     return axios.get(`/api/stocks/${symbol}`)
   },
-  getAllStocks() {
+  async getAllStocks() {
     // return axios.get(`/api/stocks`)
+    await new Promise(resolve => setTimeout(resolve, 1000))
     return {
       data: samplePhisixResult
     }

@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import journal from '@/store/journal'
 import trades from '@/store/trades'
 import pse from '@/store/pse'
+import account from '@/store/account'
 
 const createStore = () => {
   return new Vuex.Store({
@@ -38,6 +39,7 @@ const createStore = () => {
       journal,
       trades,
       pse,
+      account
     }
   })
 }

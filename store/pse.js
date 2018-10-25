@@ -11,6 +11,8 @@ export default {
       if(state.stocks && state.stocks.length > 0) {
         const stock = _.find(state.stocks, stock => stock.symbol.toUpperCase() == symbol.toUpperCase())
         return stock ? Number(stock.price.amount) : null
+      } else {
+        console.error('No stock prices data found.')
       }
 
       return null
